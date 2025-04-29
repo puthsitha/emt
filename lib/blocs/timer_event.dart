@@ -1,0 +1,42 @@
+part of 'timer_bloc.dart';
+
+@immutable
+sealed class TimerEvent {}
+
+class StartTimer extends TimerEvent {
+  final String id;
+  final String name;
+  final double hourlyRate;
+
+  StartTimer({
+    required this.id,
+    required this.name,
+    required this.hourlyRate,
+  });
+}
+
+class PauseTimer extends TimerEvent {
+  final String id;
+
+  PauseTimer(this.id);
+}
+
+class ResumeTimer extends TimerEvent {
+  final String id;
+
+  ResumeTimer(this.id);
+}
+
+class StopTimer extends TimerEvent {
+  final String id;
+
+  StopTimer(this.id);
+}
+
+class DeleteTimer extends TimerEvent {
+  final String id;
+
+  DeleteTimer(this.id);
+}
+
+class Tick extends TimerEvent {}
