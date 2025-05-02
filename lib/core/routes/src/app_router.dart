@@ -1,6 +1,9 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/routes/src/not_found_screen.dart';
 import 'package:employee_work/pages/history_page.dart';
 import 'package:employee_work/pages/home_page.dart';
+import 'package:employee_work/pages/setting_page.dart';
 import 'package:employee_work/pages/splash_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +13,12 @@ enum Pages {
   // Splash
   splash,
   //home
+  app,
   home,
   //history,
   history,
+  //setting
+  setting,
 }
 
 class AppRouter {
@@ -25,6 +31,10 @@ class AppRouter {
 
   static final homeShellNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'home');
+  static final historyShellNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'history');
+  static final settingShellNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'setting');
 
   static GoRouter router = GoRouter(
     initialLocation: '/',
@@ -47,20 +57,117 @@ class AppRouter {
         },
       ),
       GoRoute(
-          name: Pages.home.name,
-          path: '/app',
-          pageBuilder: (context, state) {
-            return HomePage.page(key: state.pageKey);
-          },
-          routes: [
-            GoRoute(
-              name: Pages.history.name,
-              path: 'history',
-              pageBuilder: (context, state) {
-                return HistoryPage.page(key: state.pageKey);
+        name: Pages.app.name,
+        path: '/app',
+        redirect: (context, state) {
+          if (state.fullPath == '/app') {
+            return '/app/home';
+          }
+          return null;
+        },
+        routes: [
+          StatefulShellRoute.indexedStack(
+              builder: (context, state, navigationShell) {
+                navigationBottomBarShell = navigationShell;
+                return BottomNavigationPage(
+                  child: navigationShell,
+                );
               },
-            ),
-          ]),
+              branches: [
+                StatefulShellBranch(
+                  navigatorKey: homeShellNavigatorKey,
+                  routes: [
+                    GoRoute(
+                        name: Pages.home.name,
+                        path: '/home',
+                        pageBuilder: (context, state) {
+                          return HomePage.page(key: state.pageKey);
+                        },
+                        routes: const []),
+                  ],
+                ),
+                StatefulShellBranch(
+                  navigatorKey: historyShellNavigatorKey,
+                  routes: [
+                    GoRoute(
+                      name: Pages.history.name,
+                      path: 'history',
+                      pageBuilder: (context, state) {
+                        return HistoryPage.page(key: state.pageKey);
+                      },
+                    ),
+                  ],
+                ),
+                StatefulShellBranch(
+                  navigatorKey: settingShellNavigatorKey,
+                  routes: [
+                    GoRoute(
+                      path: 'setting',
+                      name: Pages.setting.name,
+                      pageBuilder: (context, state) {
+                        return SettingPage.page(
+                          key: state.pageKey,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ]),
+        ],
+      ),
     ],
   );
+}
+
+class BottomNavigationPage extends StatefulWidget {
+  const BottomNavigationPage({super.key, required this.child});
+
+  final StatefulNavigationShell child;
+
+  @override
+  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
+}
+
+class _BottomNavigationPageState extends State<BottomNavigationPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: context.colors.transparent,
+        buttonBackgroundColor: context.colors.primary,
+        color: context.colors.primary,
+        items: const <Widget>[
+          Icon(
+            Icons.home,
+            size: 30,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.auto_graph_outlined,
+            size: 30,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.settings,
+            size: 30,
+            color: Colors.white,
+          ),
+        ],
+        onTap: (index) {
+          if (index == widget.child.currentIndex) return;
+          widget.child.goBranch(
+            index,
+            initialLocation: index == widget.child.currentIndex,
+          );
+        },
+      ),
+      body: widget.child,
+    );
+  }
 }

@@ -150,7 +150,7 @@ final darkTheme = ThemeData(
           fontFamilyFallback: [Fonts.kh],
         ),
         headlineLarge: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.w600,
           fontFamily: Fonts.en,
           fontFamilyFallback: [Fonts.kh],

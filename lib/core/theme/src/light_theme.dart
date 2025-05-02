@@ -125,7 +125,7 @@ final lightTheme = ThemeData(
           fontFamilyFallback: [Fonts.kh],
         ),
         headlineLarge: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.w600,
           fontFamilyFallback: [Fonts.kh],
         ),

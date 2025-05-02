@@ -1,4 +1,4 @@
-enum TimerStatus { running, paused, stopped }
+import 'package:employee_work/core/enums/enum.dart';
 
 class PersonTimer {
   final String id;
