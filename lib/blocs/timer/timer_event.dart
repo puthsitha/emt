@@ -40,3 +40,19 @@ class DeleteTimer extends TimerEvent {
 }
 
 class Tick extends TimerEvent {}
+
+class ResetTimer extends TimerEvent {
+  final String id;
+
+  ResetTimer(this.id);
+}
+
+class ResetAllTimers extends TimerEvent {}
+
+class StopAllTimers extends TimerEvent {}
+
+class PauseAllTimers extends TimerEvent {}
+
+class ResumeAllTimers extends TimerEvent {}
+
+class ReStartAllTimers extends TimerEvent {}

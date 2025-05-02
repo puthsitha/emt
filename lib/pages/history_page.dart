@@ -1,4 +1,10 @@
-import 'package:employee_work/blocs/timer_bloc.dart';
+import 'package:employee_work/blocs/timer/timer_bloc.dart';
+import 'package:employee_work/core/common/common.dart';
+import 'package:employee_work/core/enums/enum.dart';
+import 'package:employee_work/core/extensions/extension.dart';
+import 'package:employee_work/core/theme/colors.dart';
+import 'package:employee_work/core/theme/spacing.dart';
+import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/models/person_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,8 +33,17 @@ class HistoryView extends StatefulWidget {
 class _HistoryViewState extends State<HistoryView> {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('History')),
+      appBar: AppBar(
+        title: Text(
+          l10n.history,
+          style: context.textTheme.headlineLarge!.copyWith(
+            color: AppColors.white,
+          ),
+        ),
+        backgroundColor: context.colors.primary,
+      ),
       body: BlocBuilder<TimerBloc, TimerState>(
         builder: (context, state) {
           final finishedTimers = state.timers
@@ -36,14 +51,17 @@ class _HistoryViewState extends State<HistoryView> {
               .toList();
 
           if (finishedTimers.isEmpty) {
-            return const Center(child: Text('No history yet.'));
+            return Center(child: Text(l10n.no_history_yet));
           }
 
           return Column(
             children: [
               Expanded(child: _buildChart(finishedTimers)),
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => const Divider(
+                    thickness: 1,
+                  ),
                   itemCount: finishedTimers.length,
                   itemBuilder: (context, index) {
                     final timer = finishedTimers[index];
@@ -55,9 +73,84 @@ class _HistoryViewState extends State<HistoryView> {
                     final seconds = twoDigits(time.inSeconds.remainder(60));
 
                     return ListTile(
-                      title: Text(timer.name),
-                      subtitle: Text(
-                          'Time: $hours:$minutes:$seconds\nPrice: ${timer.totalPrice.toStringAsFixed(2)} Riels'),
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundColor: getAvatarColor(timer.name),
+                              child: Text(
+                                timer.name.substring(0, 2),
+                                style: context.textTheme.titleMedium!.copyWith(
+                                  color: context.colors.white,
+                                ),
+                              )),
+                          const SizedBox(width: Spacing.s),
+                          Text(
+                            timer.name,
+                            style: context.textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        children: [
+                          const SizedBox(height: Spacing.s),
+                          Row(
+                            children: [
+                              Text(
+                                '${l10n.time} : ',
+                                style: context.textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: Spacing.s),
+                              RichText(
+                                text: TextSpan(
+                                  style:
+                                      context.textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  children: [
+                                    if (hours != '00')
+                                      TextSpan(
+                                        text: '$hours ${l10n.hour}',
+                                        style: const TextStyle(
+                                            color: Colors.green),
+                                      ),
+                                    if (minutes != '00')
+                                      TextSpan(
+                                        text: ' $minutes ${l10n.minute}',
+                                        style:
+                                            const TextStyle(color: Colors.blue),
+                                      ),
+                                    TextSpan(
+                                      text: ' $seconds ${l10n.second}',
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: Spacing.sm),
+                          Row(
+                            children: [
+                              Text(
+                                '${l10n.price} : ',
+                                style: context.textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: Spacing.s),
+                              Text(
+                                '${timer.totalPrice.toStringAsFixed(0)} ${l10n.riel}',
+                                style: context.textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: context.colors.greenPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -77,7 +170,7 @@ class _HistoryViewState extends State<HistoryView> {
           alignment: BarChartAlignment.spaceAround,
           titlesData: FlTitlesData(
             leftTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: true),
+              sideTitles: SideTitles(showTitles: false),
             ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(

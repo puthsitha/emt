@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/models/person_timer.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'timer_event.dart';
@@ -15,10 +16,16 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     on<StopTimer>(_onStopTimer);
     on<DeleteTimer>(_onDeleteTimer);
     on<Tick>(_onTick);
+    on<ResetTimer>(_resetTimer);
+    on<ResetAllTimers>(_resetAllTimer);
+    on<StopAllTimers>(_stopAllTimers);
+    on<PauseAllTimers>(_pauseAllTimers);
+    on<ResumeAllTimers>(_resumeAllTimers);
+    on<ReStartAllTimers>(_reStartAllTimers);
 
     // Start the ticking
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      print('Ticking...');
+      if (kDebugMode) {}
       add(Tick());
     });
   }
@@ -35,7 +42,7 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     );
 
     emit(state.copyWith(
-      timers: [...state.timers, newTimer],
+      timers: [newTimer, ...state.timers],
     ));
   }
 
@@ -64,7 +71,9 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
 
   void _onResumeTimer(ResumeTimer event, Emitter<TimerState> emit) {
     final updatedTimers = state.timers.map((timer) {
-      if (timer.id == event.id && timer.status == TimerStatus.paused) {
+      if (timer.id == event.id &&
+          (timer.status == TimerStatus.paused ||
+              timer.status == TimerStatus.stopped)) {
         return timer.copyWith(
           startTime: DateTime.now(),
           pausedDuration: Duration.zero,
@@ -120,6 +129,102 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     }).toList();
 
     emit(state.copyWith(timers: updatedTimers));
+  }
+
+  void _resetTimer(ResetTimer event, Emitter<TimerState> emit) {
+    final updatedTimers = state.timers.map((timer) {
+      if (timer.id == event.id) {
+        return timer.copyWith(
+          startTime: null,
+          pausedDuration: Duration.zero,
+          elapsedSeconds: 0,
+          status: TimerStatus.stopped,
+        );
+      }
+      return timer;
+    }).toList();
+
+    emit(state.copyWith(timers: updatedTimers));
+  }
+
+  void _resetAllTimer(ResetAllTimers event, Emitter<TimerState> emit) {
+    final resetTimers = state.timers.map((timer) {
+      return timer.copyWith(
+        startTime: null,
+        pausedDuration: Duration.zero,
+        elapsedSeconds: 0,
+        status: TimerStatus.stopped,
+      );
+    }).toList();
+
+    emit(state.copyWith(timers: resetTimers));
+  }
+
+  void _stopAllTimers(StopAllTimers event, Emitter<TimerState> emit) {
+    final updatedTimers = state.timers.map((timer) {
+      if (timer.status == TimerStatus.running ||
+          timer.status == TimerStatus.paused) {
+        final elapsed = timer.currentElapsedSeconds();
+
+        return timer.copyWith(
+          status: TimerStatus.stopped,
+          elapsedSeconds: elapsed,
+          startTime: null,
+          pausedDuration: Duration.zero,
+        );
+      }
+      return timer;
+    }).toList();
+
+    emit(state.copyWith(timers: updatedTimers));
+  }
+
+  void _pauseAllTimers(PauseAllTimers event, Emitter<TimerState> emit) {
+    final updatedTimers = state.timers.map((timer) {
+      if (timer.status == TimerStatus.running) {
+        final elapsed = timer.currentElapsedSeconds();
+
+        return timer.copyWith(
+          status: TimerStatus.paused,
+          elapsedSeconds: elapsed,
+          startTime: null,
+        );
+      }
+      return timer;
+    }).toList();
+
+    emit(state.copyWith(timers: updatedTimers));
+  }
+
+  void _resumeAllTimers(ResumeAllTimers event, Emitter<TimerState> emit) {
+    final now = DateTime.now();
+
+    final updatedTimers = state.timers.map((timer) {
+      if (timer.status == TimerStatus.paused) {
+        return timer.copyWith(
+          status: TimerStatus.running,
+          startTime: now,
+        );
+      }
+      return timer;
+    }).toList();
+
+    emit(state.copyWith(timers: updatedTimers));
+  }
+
+  void _reStartAllTimers(ReStartAllTimers event, Emitter<TimerState> emit) {
+    final now = DateTime.now();
+
+    final startedTimers = state.timers.map((timer) {
+      return timer.copyWith(
+        startTime: now,
+        pausedDuration: Duration.zero,
+        elapsedSeconds: 0,
+        status: TimerStatus.running,
+      );
+    }).toList();
+
+    emit(state.copyWith(timers: startedTimers));
   }
 
   @override
