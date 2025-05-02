@@ -1,5 +1,6 @@
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/theme/spacing.dart';
+import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -95,6 +96,10 @@ class _AddPersonState extends State<AddPerson> {
             context.read<TimerBloc>().add(
                   StartTimer(id: id, name: name, hourlyRate: rate.toDouble()),
                 );
+            // VoiceUtil.alertSound('sounds/bell.mp3').then((_) {
+            VoiceUtil.speakText(
+                '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
+            // });
             context.pop();
           },
           child: Text(l10n.start, style: const TextStyle(color: Colors.white)),
