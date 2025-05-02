@@ -1,8 +1,10 @@
+import 'package:employee_work/blocs/lang/language_bloc.dart';
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/common/common.dart';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/extensions/extension.dart';
 import 'package:employee_work/core/theme/spacing.dart';
+import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/models/person_timer.dart';
 import 'package:employee_work/widgets/widgets.dart';
@@ -64,14 +66,22 @@ class PersonCard extends StatelessWidget {
               : null,
           title: Row(
             children: [
-              CircleAvatar(
-                  backgroundColor: getAvatarColor(timer.name),
-                  child: Text(
-                    timer.name.substring(0, 2),
-                    style: context.textTheme.titleMedium!.copyWith(
-                      color: Colors.white,
-                    ),
-                  )),
+              BlocBuilder<LanguageBloc, LanguageState>(
+                builder: (context, langState) {
+                  return CircleAvatar(
+                      backgroundColor: getAvatarColor(timer.name),
+                      child: Text(
+                        timer.name.substring(
+                            0,
+                            langState.selectLanguage == const Locale('en')
+                                ? 2
+                                : 3),
+                        style: context.textTheme.titleMedium!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ));
+                },
+              ),
               const SizedBox(width: Spacing.s),
               Text(
                 timer.name,
@@ -185,6 +195,8 @@ class PersonCard extends StatelessWidget {
                     color: context.colors.orangePrimary,
                   ),
                   onPressed: () {
+                    VoiceUtil.speakText(
+                        '${timer.name}${'សម្រាកធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
                     context.read<TimerBloc>().add(PauseTimer(timer.id));
                   },
                 )
@@ -192,6 +204,8 @@ class PersonCard extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.play_arrow, color: context.colors.primary),
                   onPressed: () {
+                    VoiceUtil.speakText(
+                        '${timer.name}${'បន្តធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
                     context.read<TimerBloc>().add(ResumeTimer(timer.id));
                   },
                 ),
@@ -199,6 +213,8 @@ class PersonCard extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.stop, color: context.colors.redPrimary),
                   onPressed: () {
+                    VoiceUtil.speakText(
+                        '${timer.name}${'ឈប់ធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
                     context.read<TimerBloc>().add(StopTimer(timer.id));
                   },
                 )
@@ -216,6 +232,8 @@ class PersonCard extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.start, color: context.colors.greenPrimary),
                   onPressed: () {
+                    VoiceUtil.speakText(
+                        '${timer.name}${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
                     context.read<TimerBloc>().add(ResumeTimer(timer.id));
                   },
                 ),

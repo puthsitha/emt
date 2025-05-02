@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
+import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class DeletePerson extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
+            VoiceUtil.speakText('លុបបានសម្រេច');
             context.read<TimerBloc>().add(DeleteTimer(id));
             context.pop();
           },

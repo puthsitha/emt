@@ -1,4 +1,5 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
+import 'dart:developer';
 
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
@@ -8,6 +9,7 @@ import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,6 +32,19 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  FlutterTts flutterTts = FlutterTts();
+
+  @override
+  void initState() {
+    _getVoice();
+    super.initState();
+  }
+
+  Future<void> _getVoice() async {
+    final voices = await flutterTts.getVoices;
+    log('voice : $voices');
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -50,7 +65,10 @@ class _HomeViewState extends State<HomeView> {
               if (state.timers.isNotEmpty) {
                 return PopupMenuButton(
                     position: PopupMenuPosition.under,
-                    icon: const Icon(Icons.menu_open_sharp),
+                    icon: const Icon(
+                      Icons.menu_open_sharp,
+                      color: AppColors.white,
+                    ),
                     itemBuilder: (_) => [
                           PopupMenuItem(
                             value: 'pause',
@@ -165,7 +183,9 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: Spacing.l9),
         child: FloatingActionButton(
-          onPressed: () => _showCreatePersonDialog(context),
+          onPressed: () {
+            _showCreatePersonDialog(context);
+          },
           child: const Icon(Icons.add),
         ),
       ),
