@@ -26,86 +26,85 @@ class SplashView extends StatefulWidget {
   State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Alignment> _topAlignmentAnimation;
-  late Animation<Alignment> _bottomAlignmentAnimation;
+class _SplashViewState extends State<SplashView> {
+  // late AnimationController _controller;
+  // late Animation<Alignment> _topAlignmentAnimation;
+  // late Animation<Alignment> _bottomAlignmentAnimation;
 
   @override
   void initState() {
     super.initState();
     init();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    );
-    _topAlignmentAnimation = TweenSequence<Alignment>(
-      [
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.topRight,
-            end: Alignment.bottomRight,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.bottomRight,
-            end: Alignment.bottomLeft,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topLeft,
-          ),
-          weight: 1,
-        ),
-      ],
-    ).animate(_controller);
+    // _controller = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(seconds: 10),
+    // );
+    // _topAlignmentAnimation = TweenSequence<Alignment>(
+    //   [
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.topLeft,
+    //         end: Alignment.topRight,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.topRight,
+    //         end: Alignment.bottomRight,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.bottomRight,
+    //         end: Alignment.bottomLeft,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.bottomLeft,
+    //         end: Alignment.topLeft,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //   ],
+    // ).animate(_controller);
 
-    _bottomAlignmentAnimation = TweenSequence<Alignment>(
-      [
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.bottomRight,
-            end: Alignment.bottomLeft,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topLeft,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-          ),
-          weight: 1,
-        ),
-        TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(
-            begin: Alignment.topRight,
-            end: Alignment.bottomRight,
-          ),
-          weight: 1,
-        ),
-      ],
-    ).animate(_controller);
-    _controller.repeat();
+    // _bottomAlignmentAnimation = TweenSequence<Alignment>(
+    //   [
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.bottomRight,
+    //         end: Alignment.bottomLeft,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.bottomLeft,
+    //         end: Alignment.topLeft,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.topLeft,
+    //         end: Alignment.topRight,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //     TweenSequenceItem<Alignment>(
+    //       tween: Tween<Alignment>(
+    //         begin: Alignment.topRight,
+    //         end: Alignment.bottomRight,
+    //       ),
+    //       weight: 1,
+    //     ),
+    //   ],
+    // ).animate(_controller);
+    // _controller.repeat();
   }
 
   @override
@@ -120,12 +119,12 @@ class _SplashViewState extends State<SplashView>
   Future<void> init() async {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        Timer(
-          const Duration(seconds: 5),
-          () {
-            context.goNamed(Pages.home.name);
-          },
-        );
+        context.goNamed(Pages.home.name);
+        // Timer(
+        //   const Duration(seconds: 5),
+        //   () {
+        //   },
+        // );
       },
     );
   }
@@ -133,48 +132,53 @@ class _SplashViewState extends State<SplashView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colors.white,
-      body: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, _) {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: const [Color(0xFF0091FF), Color(0xFF00E1E0)],
-                  begin: _topAlignmentAnimation.value,
-                  end: _bottomAlignmentAnimation.value,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 250,
-                    height: 250,
-                  ),
-                  const Text(
-                    'Developed by',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    'Puthsitha Moeurn',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            );
-          }),
-    );
+        backgroundColor: context.colors.white,
+        body: const Center(
+          child: CircularProgressIndicator(),
+        )
+
+        // AnimatedBuilder(
+        //   animation: _controller,
+        //   builder: (context, _) {
+        //     return Container(
+        //       width: double.infinity,
+        //       height: double.infinity,
+        //       decoration: BoxDecoration(
+        //         gradient: LinearGradient(
+        //           colors: const [Color(0xFF0091FF), Color(0xFF00E1E0)],
+        //           begin: _topAlignmentAnimation.value,
+        //           end: _bottomAlignmentAnimation.value,
+        //         ),
+        //       ),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           const Spacer(),
+        //           Image.asset(
+        //             'assets/images/logo.png',
+        //             width: 250,
+        //             height: 250,
+        //           ),
+        //           const Text(
+        //             'Developed by',
+        //             style: TextStyle(
+        //               fontSize: 20,
+        //               fontWeight: FontWeight.bold,
+        //             ),
+        //           ),
+        //           const Text(
+        //             'Puthsitha Moeurn',
+        //             style: TextStyle(
+        //               fontSize: 30,
+        //               fontWeight: FontWeight.bold,
+        //             ),
+        //           ),
+        //           const Spacer(),
+        //         ],
+        //       ),
+        //     );
+        //   },
+        // ),
+        );
   }
 }

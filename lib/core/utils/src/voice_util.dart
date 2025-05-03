@@ -2,15 +2,24 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 abstract class VoiceUtil {
-  static Future<void> speakText(String text) async {
+  static Future<void> speakText(
+    String text, {
+    void Function()? grantedCallback,
+  }) async {
     final FlutterTts flutterTts = FlutterTts();
-
-    await flutterTts.setLanguage("km-KH"); // or "km-KH" for Khmer
-    await flutterTts.setSpeechRate(0.5); // optional: 0.0 to 1.0
+    final isSupportKhmer = await flutterTts.isLanguageInstalled("km-KH");
+    if (isSupportKhmer) {
+      await flutterTts.setLanguage("km-KH");
+      await flutterTts.setVoice({"name": "km-KH-language", "locale": "km-KH"});
+    } else {
+      if (grantedCallback != null) {
+        grantedCallback();
+      }
+      await flutterTts.setLanguage("en-US");
+      await flutterTts.setVoice({"name": "en-US-language", "locale": "en-US"});
+    }
+    await flutterTts.setSpeechRate(0.5);
     await flutterTts.setVolume(1);
-    // await flutterTts.setVoice({"name": "km-kh-x-khm-local", "locale": "km-KH"});
-    // await flutterTts
-    //     .setVoice({"name": "km-kh-x-khm-network", "locale": "km-KH"});
     await flutterTts.speak(text);
   }
 
