@@ -91,5 +91,13 @@
   "system_default": "ផ្ទាំងដូចទូរស័ព្ទ",
   "@system_default": {},
   "dark_mode_description": "កម្មវិធីនេះនឹងប្រើផ្ទាំងងងឹត",
-  "@dark_mode_description": {}
+  "@dark_mode_description": {},
+  "voice": "សំឡេង",
+  "@voice": {},
+  "change_voice_sound": "ផ្តូរសំឡេងនិយាយ",
+  "@change_voice_sound": {},
+  "alert": "ដាស់តឿន",
+  "@alert": {},
+  "sound_khmer_not_supported": "សំឡេងខ្មែរមិនគាំទ្រទេ",
+  "@sound_khmer_not_supported": {}
 }

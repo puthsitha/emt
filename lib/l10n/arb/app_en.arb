@@ -91,5 +91,13 @@
   "system_default": "System Default",
   "@system_default": {},
   "dark_mode_description": "App look darker.",
-  "@dark_mode_description": {}
+  "@dark_mode_description": {},
+  "voice": "Voice",
+  "@voice": {},
+  "change_voice_sound": "Change Voice Sound",
+  "@change_voice_sound": {},
+  "alert": "Alert",
+  "@alert": {},
+  "sound_khmer_not_supported": "Sound Khmer not supported",
+  "@sound_khmer_not_supported": {}
 }

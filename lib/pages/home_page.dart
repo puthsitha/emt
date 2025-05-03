@@ -1,6 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/theme/spacing.dart';
@@ -9,7 +6,6 @@ import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -32,17 +28,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  FlutterTts flutterTts = FlutterTts();
-
   @override
   void initState() {
-    _getVoice();
     super.initState();
-  }
-
-  Future<void> _getVoice() async {
-    final voices = await flutterTts.getVoices;
-    log('voice : $voices');
   }
 
   @override

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "en-GB-language",
+    "locale": "en-GB"
+  },
+  {
+    "name": "en-AU-language",
+    "locale": "en-AU"
+  },
+  {
+    "name": "en-au-x-aud-local",
+    "locale": "en-AU"
+  },
+  {
+    "name": "en-au-x-aua-local",
+    "locale": "en-AU"
+  },
+  {
+    "name": "en-IN-language",
+    "locale": "en-IN"
+  },
+  {
+    "name": "km-KH-language",
+    "locale": "km-KH"
+  },
+  {
+    "name": "en-au-x-auc-local",
+    "locale": "en-AU"
+  },
+  {
+    "name": "en-US-language",
+    "locale": "en-US"
+  },
+  {
+    "name": "en-NG-language",
+    "locale": "en-NG"
+  }
+]

@@ -5,6 +5,7 @@ import 'package:employee_work/pages/history_page.dart';
 import 'package:employee_work/pages/home_page.dart';
 import 'package:employee_work/pages/setting_page.dart';
 import 'package:employee_work/pages/splash_page.dart';
+import 'package:employee_work/pages/voice_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,7 @@ enum Pages {
   history,
   //setting
   setting,
+  voice,
 }
 
 class AppRouter {
@@ -109,6 +111,18 @@ class AppRouter {
                           key: state.pageKey,
                         );
                       },
+                      routes: [
+                        GoRoute(
+                          path: 'voice',
+                          name: Pages.voice.name,
+                          parentNavigatorKey: rootNavigatorKey,
+                          pageBuilder: (context, state) {
+                            return VoicePage.page(
+                              key: state.pageKey,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),

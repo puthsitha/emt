@@ -20,7 +20,7 @@ class AddPerson extends StatefulWidget {
 class _AddPersonState extends State<AddPerson> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final rateController = TextEditingController(text: "1000");
+  final rateController = TextEditingController(text: "4000");
   final nameFocus = FocusNode();
   final rateFocus = FocusNode();
 
@@ -98,7 +98,16 @@ class _AddPersonState extends State<AddPerson> {
                 );
             // VoiceUtil.alertSound('sounds/bell.mp3').then((_) {
             VoiceUtil.speakText(
-                '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
+              '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(
+                DateTime.now(),
+              )}',
+              grantedCallback: () {
+                AlertDialog(
+                  title: Text(l10n.alert),
+                  content: Text(l10n.sound_khmer_not_supported),
+                );
+              },
+            );
             // });
             context.pop();
           },

@@ -1,6 +1,8 @@
 import 'package:employee_work/blocs/theme/theme_bloc.dart';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/extensions/extension.dart';
+import 'package:employee_work/core/routes/routes.dart';
+import 'package:employee_work/core/routes/src/app_router.dart';
 import 'package:employee_work/core/theme/spacing.dart';
 import 'package:employee_work/core/theme/theme.dart';
 import 'package:employee_work/core/utils/util.dart';
@@ -8,6 +10,7 @@ import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -107,6 +110,26 @@ class _SettingViewState extends State<SettingView> {
                     },
                   ),
                 );
+              },
+            ),
+            const SizedBox(height: Spacing.sm),
+            ListTile(
+              leading: const Icon(
+                Icons.record_voice_over_sharp,
+                size: 40,
+                color: Colors.redAccent,
+              ),
+              title: Text(
+                l10n.voice,
+                style: context.textTheme.titleLarge,
+              ),
+              subtitle: Text(
+                l10n.change_voice_sound,
+                style: context.textTheme.bodyLarge,
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                context.pushNamed(Pages.voice.name);
               },
             ),
             const SizedBox(height: Spacing.sm),
