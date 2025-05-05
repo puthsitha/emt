@@ -99,5 +99,7 @@
   "alert": "Alert",
   "@alert": {},
   "sound_khmer_not_supported": "Sound Khmer not supported",
-  "@sound_khmer_not_supported": {}
+  "@sound_khmer_not_supported": {},
+  "allow_speak": "Allow to speak",
+  "@allow_speak": {}
 }

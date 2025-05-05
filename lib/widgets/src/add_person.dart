@@ -1,4 +1,5 @@
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
+import 'package:employee_work/blocs/voice/voice_bloc.dart';
 import 'package:employee_work/core/theme/spacing.dart';
 import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
@@ -96,19 +97,24 @@ class _AddPersonState extends State<AddPerson> {
             context.read<TimerBloc>().add(
                   StartTimer(id: id, name: name, hourlyRate: rate.toDouble()),
                 );
-            // VoiceUtil.alertSound('sounds/bell.mp3').then((_) {
-            VoiceUtil.speakText(
-              '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(
-                DateTime.now(),
-              )}',
-              grantedCallback: () {
-                AlertDialog(
-                  title: Text(l10n.alert),
-                  content: Text(l10n.sound_khmer_not_supported),
-                );
-              },
-            );
-            // });
+
+            final allowSpeak = context.read<VoiceBloc>().state.enableVoice;
+            if (allowSpeak) {
+              VoiceUtil.speakText(
+                '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(
+                  DateTime.now(),
+                )}',
+                grantedCallback: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text(l10n.alert),
+                      content: Text(l10n.sound_khmer_not_supported),
+                    ),
+                  );
+                },
+              );
+            }
             context.pop();
           },
           child: Text(l10n.start, style: const TextStyle(color: Colors.white)),

@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/routes/src/not_found_screen.dart';
+import 'package:employee_work/core/theme/theme.dart';
 import 'package:employee_work/pages/history_page.dart';
 import 'package:employee_work/pages/home_page.dart';
 import 'package:employee_work/pages/setting_page.dart';
@@ -156,21 +157,27 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         backgroundColor: context.colors.transparent,
         buttonBackgroundColor: context.colors.primary,
         color: context.colors.primary,
-        items: const <Widget>[
+        items: <Widget>[
           Icon(
             Icons.home,
             size: 30,
-            color: Colors.white,
+            color: widget.child.currentIndex == 0
+                ? AppColors.white
+                : AppColors.white.withOpacity(0.5),
           ),
           Icon(
             Icons.auto_graph_outlined,
             size: 30,
-            color: Colors.white,
+            color: widget.child.currentIndex == 1
+                ? AppColors.white
+                : AppColors.white.withOpacity(0.5),
           ),
           Icon(
             Icons.settings,
             size: 30,
-            color: Colors.white,
+            color: widget.child.currentIndex == 2
+                ? AppColors.white
+                : AppColors.white.withOpacity(0.5),
           ),
         ],
         onTap: (index) {

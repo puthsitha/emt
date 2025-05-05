@@ -99,5 +99,7 @@
   "alert": "ដាស់តឿន",
   "@alert": {},
   "sound_khmer_not_supported": "សំឡេងខ្មែរមិនគាំទ្រទេ",
-  "@sound_khmer_not_supported": {}
+  "@sound_khmer_not_supported": {},
+  "allow_speak": "អនុញ្ញាតឱ្យនិយាយ",
+  "@allow_speak": {}
 }
