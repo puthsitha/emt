@@ -1,5 +1,6 @@
 import 'package:employee_work/blocs/lang/language_bloc.dart';
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
+import 'package:employee_work/blocs/voice/voice_bloc.dart';
 import 'package:employee_work/core/common/common.dart';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/extensions/extension.dart';
@@ -185,59 +186,113 @@ class PersonCard extends StatelessWidget {
               ),
             ],
           ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (timer.status == TimerStatus.running)
-                IconButton(
-                  icon: Icon(
-                    Icons.pause,
-                    color: context.colors.orangePrimary,
-                  ),
-                  onPressed: () {
-                    VoiceUtil.speakText(
-                        '${timer.name}${'សម្រាកធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
-                    context.read<TimerBloc>().add(PauseTimer(timer.id));
-                  },
-                )
-              else if (timer.status == TimerStatus.paused)
-                IconButton(
-                  icon: Icon(Icons.play_arrow, color: context.colors.primary),
-                  onPressed: () {
-                    VoiceUtil.speakText(
-                        '${timer.name}${'បន្តធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
-                    context.read<TimerBloc>().add(ResumeTimer(timer.id));
-                  },
-                ),
-              if (timer.status != TimerStatus.stopped)
-                IconButton(
-                  icon: Icon(Icons.stop, color: context.colors.redPrimary),
-                  onPressed: () {
-                    VoiceUtil.speakText(
-                        '${timer.name}${'ឈប់ធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
-                    context.read<TimerBloc>().add(StopTimer(timer.id));
-                  },
-                )
-              else if (timer.totalPrice != 0.0)
-                IconButton(
-                  icon: Icon(Icons.restart_alt,
-                      color: context.colors.purplePrimary),
-                  onPressed: () {
-                    context.read<TimerBloc>().add(ResetTimer(timer.id));
-                  },
-                ),
-              if (timer.totalPrice == 0.0 &&
-                  timer.status != TimerStatus.running &&
-                  timer.status != TimerStatus.paused)
-                IconButton(
-                  icon: Icon(Icons.start, color: context.colors.greenPrimary),
-                  onPressed: () {
-                    VoiceUtil.speakText(
-                        '${timer.name}${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}');
-                    context.read<TimerBloc>().add(ResumeTimer(timer.id));
-                  },
-                ),
-            ],
+          trailing: BlocBuilder<VoiceBloc, VoiceState>(
+            builder: (context, voiceState) {
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (timer.status == TimerStatus.running)
+                    IconButton(
+                      icon: Icon(
+                        Icons.pause,
+                        color: context.colors.orangePrimary,
+                      ),
+                      onPressed: () {
+                        if (voiceState.enableVoice) {
+                          VoiceUtil.speakText(
+                            '${timer.name}${'សម្រាកធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
+                            grantedCallback: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(l10n.alert),
+                                  content: Text(l10n.sound_khmer_not_supported),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        context.read<TimerBloc>().add(PauseTimer(timer.id));
+                      },
+                    )
+                  else if (timer.status == TimerStatus.paused)
+                    IconButton(
+                      icon:
+                          Icon(Icons.play_arrow, color: context.colors.primary),
+                      onPressed: () {
+                        if (voiceState.enableVoice) {
+                          VoiceUtil.speakText(
+                            '${timer.name}${'បន្តធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
+                            grantedCallback: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(l10n.alert),
+                                  content: Text(l10n.sound_khmer_not_supported),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        context.read<TimerBloc>().add(ResumeTimer(timer.id));
+                      },
+                    ),
+                  if (timer.status != TimerStatus.stopped)
+                    IconButton(
+                      icon: Icon(Icons.stop, color: context.colors.redPrimary),
+                      onPressed: () {
+                        if (voiceState.enableVoice) {
+                          VoiceUtil.speakText(
+                            '${timer.name}${'ឈប់ធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
+                            grantedCallback: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(l10n.alert),
+                                  content: Text(l10n.sound_khmer_not_supported),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        context.read<TimerBloc>().add(StopTimer(timer.id));
+                      },
+                    )
+                  else if (timer.totalPrice != 0.0)
+                    IconButton(
+                      icon: Icon(Icons.restart_alt,
+                          color: context.colors.purplePrimary),
+                      onPressed: () {
+                        context.read<TimerBloc>().add(ResetTimer(timer.id));
+                      },
+                    ),
+                  if (timer.totalPrice == 0.0 &&
+                      timer.status != TimerStatus.running &&
+                      timer.status != TimerStatus.paused)
+                    IconButton(
+                      icon:
+                          Icon(Icons.start, color: context.colors.greenPrimary),
+                      onPressed: () {
+                        if (voiceState.enableVoice) {
+                          VoiceUtil.speakText(
+                            '${timer.name}${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
+                            grantedCallback: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(l10n.alert),
+                                  content: Text(l10n.sound_khmer_not_supported),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        context.read<TimerBloc>().add(ResumeTimer(timer.id));
+                      },
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),

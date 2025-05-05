@@ -1,6 +1,7 @@
 import 'package:employee_work/blocs/lang/language_bloc.dart';
 import 'package:employee_work/blocs/theme/theme_bloc.dart';
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
+import 'package:employee_work/blocs/voice/voice_bloc.dart';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/routes/routes.dart';
 import 'package:employee_work/core/theme/src/dark_theme.dart';
@@ -44,6 +45,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider(
           create: (context) => ThemeBloc(),
+        ),
+        BlocProvider(
+          create: (context) => VoiceBloc(),
         ),
       ],
       child: Builder(
