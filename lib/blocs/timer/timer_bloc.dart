@@ -48,7 +48,9 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
         timers: [newTimer, ...state.timers],
       ));
     } catch (e) {
-      print('Errror: $e');
+      if (kDebugMode) {
+        print('Errror: $e');
+      }
     }
   }
 

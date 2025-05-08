@@ -35,6 +35,7 @@ class DeletePerson extends StatelessWidget {
             final allowSpeak = context.read<VoiceBloc>().state.enableVoice;
             if (allowSpeak) {
               VoiceUtil.speakText(
+                voice: 'sounds/delete.mp3',
                 'លុបបានសម្រេច',
                 grantedCallback: () {
                   showDialog(

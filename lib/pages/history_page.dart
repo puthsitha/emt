@@ -1,3 +1,4 @@
+import 'package:employee_work/blocs/lang/language_bloc.dart';
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/common/common.dart';
 import 'package:employee_work/core/enums/enum.dart';
@@ -75,14 +76,40 @@ class _HistoryViewState extends State<HistoryView> {
                     return ListTile(
                       title: Row(
                         children: [
-                          CircleAvatar(
-                              backgroundColor: getAvatarColor(timer.name),
-                              child: Text(
-                                timer.name.substring(0, 2),
-                                style: context.textTheme.titleMedium!.copyWith(
-                                  color: context.colors.white,
+                          if (timer.image != null)
+                            CircleAvatar(
+                              radius: 35,
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: ClipOval(
+                                  child: Image.file(
+                                    timer.image!,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              )),
+                              ),
+                            )
+                          else
+                            BlocBuilder<LanguageBloc, LanguageState>(
+                              builder: (context, langState) {
+                                return CircleAvatar(
+                                  radius: 35,
+                                  backgroundColor: getAvatarColor(timer.name),
+                                  child: Text(
+                                    timer.name.substring(
+                                        0,
+                                        langState.selectLanguage ==
+                                                const Locale('en')
+                                            ? 2
+                                            : 3),
+                                    style:
+                                        context.textTheme.titleMedium!.copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           const SizedBox(width: Spacing.s),
                           Text(
                             timer.name,

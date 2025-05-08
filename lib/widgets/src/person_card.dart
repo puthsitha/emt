@@ -69,10 +69,14 @@ class PersonCard extends StatelessWidget {
             children: [
               if (timer.image != null)
                 CircleAvatar(
-                  child: ClipOval(
-                    child: Image.file(
-                      timer.image!,
-                      fit: BoxFit.cover,
+                  radius: 35,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipOval(
+                      child: Image.file(
+                        timer.image!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 )
@@ -80,6 +84,7 @@ class PersonCard extends StatelessWidget {
                 BlocBuilder<LanguageBloc, LanguageState>(
                   builder: (context, langState) {
                     return CircleAvatar(
+                      radius: 35,
                       backgroundColor: getAvatarColor(timer.name),
                       child: Text(
                         timer.name.substring(
@@ -211,6 +216,7 @@ class PersonCard extends StatelessWidget {
                       onPressed: () {
                         if (voiceState.enableVoice) {
                           VoiceUtil.speakText(
+                            voice: 'sounds/pause.mp3',
                             '${timer.name}${'សម្រាកធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
                             grantedCallback: () {
                               showDialog(
@@ -233,6 +239,7 @@ class PersonCard extends StatelessWidget {
                       onPressed: () {
                         if (voiceState.enableVoice) {
                           VoiceUtil.speakText(
+                            voice: 'sounds/resume.mp3',
                             '${timer.name}${'បន្តធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
                             grantedCallback: () {
                               showDialog(
@@ -254,6 +261,7 @@ class PersonCard extends StatelessWidget {
                       onPressed: () {
                         if (voiceState.enableVoice) {
                           VoiceUtil.speakText(
+                            voice: 'sounds/stop.mp3',
                             '${timer.name}${'ឈប់ធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
                             grantedCallback: () {
                               showDialog(
@@ -286,6 +294,7 @@ class PersonCard extends StatelessWidget {
                       onPressed: () {
                         if (voiceState.enableVoice) {
                           VoiceUtil.speakText(
+                            voice: 'sounds/restart.mp3',
                             '${timer.name}${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
                             grantedCallback: () {
                               showDialog(
