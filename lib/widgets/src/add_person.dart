@@ -101,6 +101,7 @@ class _AddPersonState extends State<AddPerson> {
             final allowSpeak = context.read<VoiceBloc>().state.enableVoice;
             if (allowSpeak) {
               VoiceUtil.speakText(
+                voice: 'sounds/restart.mp3',
                 '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(
                   DateTime.now(),
                 )}',

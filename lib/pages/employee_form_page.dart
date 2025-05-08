@@ -6,10 +6,12 @@ import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/blocs/voice/voice_bloc.dart';
 import 'package:employee_work/core/extensions/extension.dart';
 import 'package:employee_work/core/theme/spacing.dart';
+import 'package:employee_work/core/theme/theme.dart';
 import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,7 +92,13 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
     return Scaffold(
       backgroundColor: context.colors.neutral98,
       appBar: AppBar(
-        title: Text(l10n.new_person),
+        title: Text(
+          l10n.new_person,
+          style: context.textTheme.headlineLarge!.copyWith(
+            color: AppColors.white,
+          ),
+        ),
+        backgroundColor: context.colors.primary,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(Spacing.l),
@@ -213,7 +221,10 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                     controller: nameController,
                     focusNode: nameFocus,
                     autofocus: true,
-                    decoration: InputDecoration(labelText: l10n.person_name),
+                    decoration: InputDecoration(
+                      labelText: l10n.person_name,
+                      fillColor: context.colors.neutral50.withOpacity(0.2),
+                    ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return l10n.name_cannot_be_empty;
@@ -229,7 +240,11 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                     focusNode: rateFocus,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(labelText: l10n.horuly_rate),
+                    decoration: InputDecoration(
+                      labelText: l10n.horuly_rate,
+                      fillColor: context.colors.neutral50.withOpacity(0.2),
+                      border: InputBorder.none,
+                    ),
                     validator: (value) {
                       final text = value?.trim() ?? '';
                       final rate = int.tryParse(text);
@@ -280,7 +295,9 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                       ),
                     );
               } catch (e) {
-                print("Error: $e");
+                if (kDebugMode) {
+                  print("Error: $e");
+                }
               }
             } else {
               context.read<TimerBloc>().add(
@@ -296,6 +313,7 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
             final allowSpeak = context.read<VoiceBloc>().state.enableVoice;
             if (allowSpeak) {
               VoiceUtil.speakText(
+                voice: 'sounds/restart.mp3',
                 '$name${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(
                   DateTime.now(),
                 )}',

@@ -3,6 +3,7 @@ import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/routes/routes.dart';
 import 'package:employee_work/core/theme/spacing.dart';
 import 'package:employee_work/core/theme/theme.dart';
+import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                             onTap: () {
                               context.read<TimerBloc>().add(PauseAllTimers());
+                              VoiceUtil.alertSound('sounds/pause.mp3');
                             },
                           ),
                           PopupMenuItem(
@@ -94,6 +96,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                             onTap: () {
                               context.read<TimerBloc>().add(ResumeAllTimers());
+                              VoiceUtil.alertSound('sounds/resume.mp3');
                             },
                           ),
                           PopupMenuItem(
@@ -108,6 +111,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               onTap: () {
                                 context.read<TimerBloc>().add(StopAllTimers());
+                                VoiceUtil.alertSound('sounds/stop.mp3');
                               }),
                           PopupMenuItem(
                               value: 'reset',
@@ -138,6 +142,7 @@ class _HomeViewState extends State<HomeView> {
                                 context
                                     .read<TimerBloc>()
                                     .add(ReStartAllTimers());
+                                VoiceUtil.alertSound('sounds/restart.mp3');
                               }),
                         ]);
               } else {
