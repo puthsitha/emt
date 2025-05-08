@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:employee_work/core/enums/enum.dart';
 
 class PersonTimer {
   final String id;
   final String name;
+  final File? image;
   final double hourlyRate;
 
   final DateTime? startTime;
@@ -25,6 +28,7 @@ class PersonTimer {
     this.pausedDuration = Duration.zero,
     this.elapsedSeconds = 0,
     this.status = TimerStatus.stopped,
+    this.image,
   });
 
   /// Calculate current total elapsed seconds
@@ -42,6 +46,7 @@ class PersonTimer {
   PersonTimer copyWith({
     String? id,
     String? name,
+    File? image,
     double? hourlyRate,
     DateTime? startTime,
     Duration? pausedDuration,
@@ -51,6 +56,7 @@ class PersonTimer {
     return PersonTimer(
       id: id ?? this.id,
       name: name ?? this.name,
+      image: image ?? this.image,
       hourlyRate: hourlyRate ?? this.hourlyRate,
       startTime: startTime ?? this.startTime,
       pausedDuration: pausedDuration ?? this.pausedDuration,
@@ -63,6 +69,7 @@ class PersonTimer {
     return <String, dynamic>{
       'id': id,
       'name': name,
+      'image': image,
       'hourlyRate': hourlyRate,
       'startTime': startTime?.toIso8601String(),
       'pausedDuration': pausedDuration.inSeconds,
@@ -72,9 +79,18 @@ class PersonTimer {
   }
 
   factory PersonTimer.fromJson(Map<String, dynamic> json) {
+    File? imageFile;
+    if (json['image'] != null && json['image'] != '') {
+      final file = File(json['image']);
+      if (file.existsSync()) {
+        imageFile = file;
+      }
+    }
+
     return PersonTimer(
       id: json['id'] as String,
       name: json['name'] as String,
+      image: imageFile,
       hourlyRate: (json['hourlyRate'] as num).toDouble(),
       startTime:
           json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
@@ -88,6 +104,7 @@ class PersonTimer {
     return {
       'id': id,
       'name': name,
+      'image': image?.path, // Save only the path
       'hourlyRate': hourlyRate,
       'startTime': startTime?.toIso8601String(),
       'pausedDuration': pausedDuration.inSeconds,

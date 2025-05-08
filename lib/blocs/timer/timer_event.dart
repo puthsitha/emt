@@ -6,12 +6,14 @@ sealed class TimerEvent {}
 class StartTimer extends TimerEvent {
   final String id;
   final String name;
+  final File? image;
   final double hourlyRate;
 
   StartTimer({
     required this.id,
     required this.name,
     required this.hourlyRate,
+    this.image,
   });
 }
 

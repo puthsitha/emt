@@ -1,11 +1,13 @@
 import 'package:employee_work/blocs/timer/timer_bloc.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
+import 'package:employee_work/core/routes/routes.dart';
 import 'package:employee_work/core/theme/spacing.dart';
 import 'package:employee_work/core/theme/theme.dart';
 import 'package:employee_work/l10n/l10n.dart';
 import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -172,19 +174,11 @@ class _HomeViewState extends State<HomeView> {
         padding: const EdgeInsets.only(bottom: Spacing.l9),
         child: FloatingActionButton(
           onPressed: () {
-            _showCreatePersonDialog(context);
+            context.pushNamed(Pages.employeeForm.name);
           },
           child: const Icon(Icons.add),
         ),
       ),
     );
-  }
-
-  void _showCreatePersonDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) => AddPerson(
-              context: context,
-            ));
   }
 }

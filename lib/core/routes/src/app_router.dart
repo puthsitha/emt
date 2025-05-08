@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/routes/src/not_found_screen.dart';
 import 'package:employee_work/core/theme/theme.dart';
+import 'package:employee_work/pages/employee_form_page.dart';
 import 'package:employee_work/pages/history_page.dart';
 import 'package:employee_work/pages/home_page.dart';
 import 'package:employee_work/pages/setting_page.dart';
@@ -16,7 +17,9 @@ enum Pages {
   splash,
   //home
   app,
+  //home
   home,
+  employeeForm,
   //history,
   history,
   //setting
@@ -81,12 +84,24 @@ class AppRouter {
                   navigatorKey: homeShellNavigatorKey,
                   routes: [
                     GoRoute(
-                        name: Pages.home.name,
-                        path: '/home',
-                        pageBuilder: (context, state) {
-                          return HomePage.page(key: state.pageKey);
-                        },
-                        routes: const []),
+                      name: Pages.home.name,
+                      path: '/home',
+                      pageBuilder: (context, state) {
+                        return HomePage.page(key: state.pageKey);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'employee-form',
+                          name: Pages.employeeForm.name,
+                          parentNavigatorKey: rootNavigatorKey,
+                          pageBuilder: (context, state) {
+                            return EmployeeFormPage.page(
+                              key: state.pageKey,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 StatefulShellBranch(

@@ -67,9 +67,19 @@ class PersonCard extends StatelessWidget {
               : null,
           title: Row(
             children: [
-              BlocBuilder<LanguageBloc, LanguageState>(
-                builder: (context, langState) {
-                  return CircleAvatar(
+              if (timer.image != null)
+                CircleAvatar(
+                  child: ClipOval(
+                    child: Image.file(
+                      timer.image!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else
+                BlocBuilder<LanguageBloc, LanguageState>(
+                  builder: (context, langState) {
+                    return CircleAvatar(
                       backgroundColor: getAvatarColor(timer.name),
                       child: Text(
                         timer.name.substring(
@@ -80,9 +90,10 @@ class PersonCard extends StatelessWidget {
                         style: context.textTheme.titleMedium!.copyWith(
                           color: Colors.white,
                         ),
-                      ));
-                },
-              ),
+                      ),
+                    );
+                  },
+                ),
               const SizedBox(width: Spacing.s),
               Text(
                 timer.name,
