@@ -101,5 +101,31 @@
   "sound_khmer_not_supported": "Sound Khmer not supported",
   "@sound_khmer_not_supported": {},
   "allow_speak": "Allow to speak",
-  "@allow_speak": {}
+  "@allow_speak": {},
+  "please_turn_on_permission": "Please turn on {permissionType} permission",
+  "@please_turn_on_permission": {
+    "placeholders": {
+      "permissionType": {
+        "description": "label permission type"
+      }
+    }
+  },
+  "open_setting": "Open Settings",
+  "@open_setting": {
+    "description": "lable open settings"
+  },
+  "photo": "Photo",
+  "@photo": {},
+  "camera": "Camera",
+  "@camera": {},
+  "chose_photo": "Choose Photo",
+  "@chose_photo": {},
+  "take_photo": "Take a Photo",
+  "@take_photo": {
+    "description": "take photo option lable"
+  },
+  "choose_from_library": "Choose from Library",
+  "@choose_from_library": {
+    "description": "choose from library option lable"
+  }
 }

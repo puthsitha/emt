@@ -101,5 +101,31 @@
   "sound_khmer_not_supported": "សំឡេងខ្មែរមិនគាំទ្រទេ",
   "@sound_khmer_not_supported": {},
   "allow_speak": "អនុញ្ញាតឱ្យនិយាយ",
-  "@allow_speak": {}
+  "@allow_speak": {},
+  "please_turn_on_permission": "សូមបើកការអនុញ្ញាត {permissionType}",
+  "@please_turn_on_permission": {
+    "placeholders": {
+      "permissionType": {
+        "description": "label permission type"
+      }
+    }
+  },
+  "open_setting": "បើកការកំណត់",
+  "@open_setting": {
+    "description": "lable open settings"
+  },
+  "photo": "រូបភាព",
+  "@photo": {},
+  "camera": "កាមេរ៉ា",
+  "@camera": {},
+  "chose_photo": "ជ្រើសរើសរូបភាព",
+  "@chose_photo": {},
+  "take_photo": "ថតរូប",
+  "@take_photo": {
+    "description": "take photo option lable"
+  },
+  "choose_from_library": "ជ្រើសរើសពីរូបភាព",
+  "@choose_from_library": {
+    "description": "choose from library option lable"
+  }
 }

@@ -48,7 +48,6 @@ class _VoiceViewState extends State<VoiceView> {
     await flutterTts.setVolume(1);
     await flutterTts.setVoice({"name": voiceName, "locale": voiceLocal});
     await flutterTts.speak("សួស្តី នេះជារបៀបដែលខ្ញុំនិយាយ");
-    print('{"name": "$voiceName", "locale": "$voiceLocal"}');
   }
 
   @override

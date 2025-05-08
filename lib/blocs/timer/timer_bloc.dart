@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/models/person_timer.dart';
 import 'package:equatable/equatable.dart';
@@ -33,17 +34,22 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
   late final Timer _ticker;
 
   void _onStartTimer(StartTimer event, Emitter<TimerState> emit) {
-    final newTimer = PersonTimer(
-      id: event.id,
-      name: event.name,
-      hourlyRate: event.hourlyRate,
-      startTime: DateTime.now(),
-      status: TimerStatus.running,
-    );
+    try {
+      final newTimer = PersonTimer(
+        id: event.id,
+        name: event.name,
+        image: event.image,
+        hourlyRate: event.hourlyRate,
+        startTime: DateTime.now(),
+        status: TimerStatus.running,
+      );
 
-    emit(state.copyWith(
-      timers: [newTimer, ...state.timers],
-    ));
+      emit(state.copyWith(
+        timers: [newTimer, ...state.timers],
+      ));
+    } catch (e) {
+      print('Errror: $e');
+    }
   }
 
   void _onPauseTimer(PauseTimer event, Emitter<TimerState> emit) {
