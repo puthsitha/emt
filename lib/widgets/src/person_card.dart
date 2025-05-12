@@ -4,6 +4,7 @@ import 'package:employee_work/blocs/voice/voice_bloc.dart';
 import 'package:employee_work/core/common/common.dart';
 import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/extensions/extension.dart';
+import 'package:employee_work/core/routes/routes.dart';
 import 'package:employee_work/core/theme/spacing.dart';
 import 'package:employee_work/core/utils/util.dart';
 import 'package:employee_work/l10n/l10n.dart';
@@ -12,6 +13,7 @@ import 'package:employee_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 
 class PersonCard extends StatelessWidget {
   const PersonCard({super.key, required this.timer});
@@ -36,11 +38,9 @@ class PersonCard extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
         closeThreshold: 0.1,
-        extentRatio: 0.2,
+        extentRatio: 0.4,
         openThreshold: 0.1,
-        key: ValueKey(
-          timer.id,
-        ),
+        key: ValueKey(timer.id),
         children: [
           SlidableAction(
             onPressed: (_) {
@@ -50,12 +50,30 @@ class PersonCard extends StatelessWidget {
             spacing: 0,
             backgroundColor: context.colors.redPrimary,
             foregroundColor: Colors.white,
-            key: ValueKey(
-              timer.id,
-            ),
             label: l10n.delete,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(6),
+              topLeft: Radius.circular(6),
+            ),
             icon: Icons.delete,
+          ),
+          SlidableAction(
+            onPressed: (_) {
+              context.pushNamed(
+                Pages.employeeForm.name,
+                queryParameters: timer.toParamater(),
+              );
+            },
+            padding: EdgeInsets.zero,
+            spacing: 2,
+            backgroundColor: context.colors.primary,
+            foregroundColor: Colors.white,
+            label: l10n.update,
+            borderRadius: const BorderRadius.only(
+              bottomRight: Radius.circular(6),
+              topRight: Radius.circular(6),
+            ),
+            icon: Icons.edit_note_sharp,
           ),
         ],
       ),
@@ -195,7 +213,7 @@ class PersonCard extends StatelessWidget {
                   ),
                   const SizedBox(width: Spacing.s),
                   Text(
-                    '${timer.hourlyRate} ${l10n.riels_hour}',
+                    '${timer.hourlyRate.toStringAsFixed(0)} ${l10n.riels_hour}',
                     style: context.textTheme.titleMedium!.copyWith(),
                   ),
                 ],
@@ -218,15 +236,7 @@ class PersonCard extends StatelessWidget {
                           VoiceUtil.speakText(
                             voice: 'sounds/pause.mp3',
                             '${timer.name}${'សម្រាកធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
-                            grantedCallback: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(l10n.alert),
-                                  content: Text(l10n.sound_khmer_not_supported),
-                                ),
-                              );
-                            },
+                            allowAIVoice: voiceState.allowAIvoie,
                           );
                         }
                         context.read<TimerBloc>().add(PauseTimer(timer.id));
@@ -241,15 +251,7 @@ class PersonCard extends StatelessWidget {
                           VoiceUtil.speakText(
                             voice: 'sounds/resume.mp3',
                             '${timer.name}${'បន្តធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
-                            grantedCallback: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(l10n.alert),
-                                  content: Text(l10n.sound_khmer_not_supported),
-                                ),
-                              );
-                            },
+                            allowAIVoice: voiceState.allowAIvoie,
                           );
                         }
                         context.read<TimerBloc>().add(ResumeTimer(timer.id));
@@ -263,15 +265,7 @@ class PersonCard extends StatelessWidget {
                           VoiceUtil.speakText(
                             voice: 'sounds/stop.mp3',
                             '${timer.name}${'ឈប់ធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
-                            grantedCallback: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(l10n.alert),
-                                  content: Text(l10n.sound_khmer_not_supported),
-                                ),
-                              );
-                            },
+                            allowAIVoice: voiceState.allowAIvoie,
                           );
                         }
                         context.read<TimerBloc>().add(StopTimer(timer.id));
@@ -296,15 +290,7 @@ class PersonCard extends StatelessWidget {
                           VoiceUtil.speakText(
                             voice: 'sounds/restart.mp3',
                             '${timer.name}${'ចាប់ផ្តើមធ្វើការ'}${TimeUtil.formatKhmerTime(DateTime.now())}',
-                            grantedCallback: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(l10n.alert),
-                                  content: Text(l10n.sound_khmer_not_supported),
-                                ),
-                              );
-                            },
+                            allowAIVoice: voiceState.allowAIvoie,
                           );
                         }
                         context.read<TimerBloc>().add(ResumeTimer(timer.id));

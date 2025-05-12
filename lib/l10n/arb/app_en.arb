@@ -127,5 +127,13 @@
   "choose_from_library": "Choose from Library",
   "@choose_from_library": {
     "description": "choose from library option lable"
-  }
+  },
+  "ai_sound": "AI Sound",
+  "@ai_sound": {},
+  "ai_sound_description": "Allow to use AI voice to speak",
+  "@ai_sound_description": {},
+  "update_empolyee": "Update Employee",
+  "@update_empolyee": {},
+  "update": "Update",
+  "@update": {}
 }

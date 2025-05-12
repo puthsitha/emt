@@ -181,7 +181,7 @@ class _HomeViewState extends State<HomeView> {
           onPressed: () {
             context.pushNamed(Pages.employeeForm.name);
           },
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.person_add_alt_1_sharp),
         ),
       ),
     );

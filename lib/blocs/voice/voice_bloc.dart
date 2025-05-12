@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'voice_event.dart';
@@ -15,12 +14,14 @@ class VoiceBloc extends HydratedBloc<VoiceEvent, VoiceState> {
         enableVoice: event.enableVoice,
       ),
     );
+    on<VoiceAIAllow>(
+      (event, emit) => toggleAIVoice(
+        event,
+        emit,
+        allow: event.allow,
+      ),
+    );
   }
-
-  static const List<Locale> supportedLocales = [
-    Locale('en'),
-    Locale('km'),
-  ];
 
   Future<void> toggleVoice(
     VoiceEvent event,
@@ -30,11 +31,23 @@ class VoiceBloc extends HydratedBloc<VoiceEvent, VoiceState> {
     emit(state.copyWith(enableVoice: enableVoice));
   }
 
+  Future<void> toggleAIVoice(
+    VoiceEvent event,
+    Emitter<VoiceState> emit, {
+    required bool allow,
+  }) async {
+    emit(state.copyWith(allowAIvoie: allow));
+  }
+
   @override
   VoiceState? fromJson(Map<String, dynamic> json) {
     try {
       final enableVoice = bool.tryParse(json['enableVoice'] as String);
-      return VoiceState(enableVoice: enableVoice ?? false);
+      final allowAIvoie = bool.tryParse(json['allowAIVoice'] as String);
+      return VoiceState(
+        enableVoice: enableVoice ?? false,
+        allowAIvoie: allowAIvoie ?? false,
+      );
     } catch (e) {
       if (kDebugMode) {
         print('Error deserializing state: $e');
@@ -47,6 +60,7 @@ class VoiceBloc extends HydratedBloc<VoiceEvent, VoiceState> {
   Map<String, dynamic>? toJson(VoiceState state) {
     return {
       'enableVoice': state.enableVoice.toString(),
+      'allowAIVoice': state.allowAIvoie.toString(),
     };
   }
 }

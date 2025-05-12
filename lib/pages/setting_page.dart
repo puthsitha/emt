@@ -46,6 +46,7 @@ class _SettingViewState extends State<SettingView> {
         backgroundColor: context.colors.primary,
       ),
       body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(Spacing.l),
         child: Column(
           children: [
@@ -115,9 +116,38 @@ class _SettingViewState extends State<SettingView> {
               builder: (context, voiceState) {
                 return ListTile(
                   leading: Icon(
-                    voiceState.enableVoice
+                    voiceState.allowAIvoie
                         ? Icons.record_voice_over_outlined
                         : Icons.voice_over_off_outlined,
+                    size: 40,
+                    color: Colors.deepPurple,
+                  ),
+                  title: Text(
+                    l10n.ai_sound,
+                    style: context.textTheme.titleLarge,
+                  ),
+                  subtitle: Text(
+                    l10n.ai_sound_description,
+                    style: context.textTheme.bodyLarge,
+                  ),
+                  trailing: Switch(
+                    value: voiceState.allowAIvoie,
+                    onChanged: (value) {
+                      final isEnable = value ? true : false;
+                      context
+                          .read<VoiceBloc>()
+                          .add(VoiceAIAllow(allow: isEnable));
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: Spacing.sm),
+            BlocBuilder<VoiceBloc, VoiceState>(
+              builder: (context, voiceState) {
+                return ListTile(
+                  leading: Icon(
+                    voiceState.enableVoice ? Icons.volume_up : Icons.volume_off,
                     size: 40,
                     color: Colors.redAccent,
                   ),
@@ -126,7 +156,6 @@ class _SettingViewState extends State<SettingView> {
                     style: context.textTheme.titleLarge,
                   ),
                   subtitle: Text(
-                    // l10n.change_voice_sound,
                     l10n.allow_speak,
                     style: context.textTheme.bodyLarge,
                   ),
@@ -139,10 +168,6 @@ class _SettingViewState extends State<SettingView> {
                           .add(VoiceAllow(enableVoice: isEnable));
                     },
                   ),
-                  // trailing: const Icon(Icons.arrow_forward_ios),
-                  // onTap: () {
-                  //   context.pushNamed(Pages.voice.name);
-                  // },
                 );
               },
             ),
@@ -166,25 +191,28 @@ class _SettingViewState extends State<SettingView> {
                 DeeplinkHelper.makePhoneCall(mobile: '092389497');
               },
             ),
-          ],
-        ),
-      ),
-      bottomSheet: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            color: context.colors.neutral100,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: Spacing.l9),
-              child: Center(
-                child: Text(
-                  '${l10n.copyright} ©️ ${l10n.version} 1.0.0',
-                  style: context.textTheme.titleMedium,
-                ),
+            Padding(
+              padding: const EdgeInsets.only(top: Spacing.l8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    color: context.colors.neutral100,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: Spacing.l9),
+                      child: Center(
+                        child: Text(
+                          '${l10n.copyright} ©️ ${l10n.version} 1.0.0',
+                          style: context.textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

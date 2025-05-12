@@ -32,20 +32,12 @@ class DeletePerson extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            final allowSpeak = context.read<VoiceBloc>().state.enableVoice;
-            if (allowSpeak) {
+            final allowSpeak = context.read<VoiceBloc>().state;
+            if (allowSpeak.enableVoice) {
               VoiceUtil.speakText(
                 voice: 'sounds/delete.mp3',
                 'លុបបានសម្រេច',
-                grantedCallback: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text(l10n.alert),
-                      content: Text(l10n.sound_khmer_not_supported),
-                    ),
-                  );
-                },
+                allowAIVoice: allowSpeak.allowAIvoie,
               );
             }
             context.read<TimerBloc>().add(DeleteTimer(id));

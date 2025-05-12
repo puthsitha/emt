@@ -9,3 +9,10 @@ class VoiceAllow extends VoiceEvent {
   });
   final bool enableVoice;
 }
+
+class VoiceAIAllow extends VoiceEvent {
+  VoiceAIAllow({
+    required this.allow,
+  });
+  final bool allow;
+}

@@ -6,7 +6,7 @@ class PersonTimer {
   final String id;
   final String name;
   final File? image;
-  final double hourlyRate;
+  final num hourlyRate;
 
   final DateTime? startTime;
   final Duration pausedDuration;
@@ -47,7 +47,7 @@ class PersonTimer {
     String? id,
     String? name,
     File? image,
-    double? hourlyRate,
+    num? hourlyRate,
     DateTime? startTime,
     Duration? pausedDuration,
     int? elapsedSeconds,
@@ -65,17 +65,30 @@ class PersonTimer {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toParamater() {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'image': image,
-      'hourlyRate': hourlyRate,
-      'startTime': startTime?.toIso8601String(),
-      'pausedDuration': pausedDuration.inSeconds,
-      'elapsedSeconds': elapsedSeconds,
-      'status': status.index,
+      'image': image?.path,
+      'hourlyRate': hourlyRate.toString(),
     };
+  }
+
+  factory PersonTimer.fromParamater(Map<String, dynamic> json) {
+    File? imageFile;
+    if (json['image'] != null && json['image'] != '') {
+      final file = File(json['image']);
+      if (file.existsSync()) {
+        imageFile = file;
+      }
+    }
+
+    return PersonTimer(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      image: imageFile,
+      hourlyRate: num.parse(json['hourlyRate'] as String),
+    );
   }
 
   factory PersonTimer.fromJson(Map<String, dynamic> json) {
@@ -91,7 +104,7 @@ class PersonTimer {
       id: json['id'] as String,
       name: json['name'] as String,
       image: imageFile,
-      hourlyRate: (json['hourlyRate'] as num).toDouble(),
+      hourlyRate: json['hourlyRate'],
       startTime:
           json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
       pausedDuration: Duration(seconds: json['pausedDuration'] ?? 0),
