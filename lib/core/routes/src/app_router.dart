@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:employee_work/core/extensions/src/build_context_ext.dart';
 import 'package:employee_work/core/routes/src/not_found_screen.dart';
 import 'package:employee_work/core/theme/theme.dart';
+import 'package:employee_work/models/person_timer.dart';
 import 'package:employee_work/pages/employee_form_page.dart';
 import 'package:employee_work/pages/history_page.dart';
 import 'package:employee_work/pages/home_page.dart';
@@ -95,8 +96,14 @@ class AppRouter {
                           name: Pages.employeeForm.name,
                           parentNavigatorKey: rootNavigatorKey,
                           pageBuilder: (context, state) {
+                            PersonTimer? employee;
+                            if (state.uri.queryParameters.isNotEmpty) {
+                              employee = PersonTimer.fromParamater(
+                                  state.uri.queryParameters);
+                            }
                             return EmployeeFormPage.page(
                               key: state.pageKey,
+                              employee: employee,
                             );
                           },
                         ),

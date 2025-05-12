@@ -23,6 +23,7 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     on<PauseAllTimers>(_pauseAllTimers);
     on<ResumeAllTimers>(_resumeAllTimers);
     on<ReStartAllTimers>(_reStartAllTimers);
+    on<UpdateTimer>(_onUpdateTimer);
 
     // Start the ticking
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -233,6 +234,21 @@ class TimerBloc extends HydratedBloc<TimerEvent, TimerState> {
     }).toList();
 
     emit(state.copyWith(timers: startedTimers));
+  }
+
+  void _onUpdateTimer(UpdateTimer event, Emitter<TimerState> emit) {
+    final updatedTimers = state.timers.map((timer) {
+      if (timer.id == event.id) {
+        return timer.copyWith(
+          name: event.name ?? timer.name,
+          hourlyRate: event.hourlyRate ?? timer.hourlyRate,
+          image: event.image ?? timer.image,
+        );
+      }
+      return timer;
+    }).toList();
+
+    emit(state.copyWith(timers: updatedTimers));
   }
 
   @override

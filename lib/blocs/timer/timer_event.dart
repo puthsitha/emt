@@ -58,3 +58,17 @@ class PauseAllTimers extends TimerEvent {}
 class ResumeAllTimers extends TimerEvent {}
 
 class ReStartAllTimers extends TimerEvent {}
+
+class UpdateTimer extends TimerEvent {
+  final String id;
+  final String? name;
+  final double? hourlyRate;
+  final File? image;
+
+  UpdateTimer({
+    required this.id,
+    this.name,
+    this.hourlyRate,
+    this.image,
+  });
+}

@@ -127,5 +127,13 @@
   "choose_from_library": "ជ្រើសរើសពីរូបភាព",
   "@choose_from_library": {
     "description": "choose from library option lable"
-  }
+  },
+  "ai_sound": "សំឡេង AI",
+  "@ai_sound": {},
+  "ai_sound_description": "សំឡេងដែលបានបង្កើតដោយ AI",
+  "@ai_sound_description": {},
+  "update_empolyee": "កែប្រែអ្នកធ្វើការ",
+  "@update_empolyee": {},
+  "update": "កែប្រែ",
+  "@update": {}
 }
