@@ -10,4 +10,14 @@ abstract class TimeUtil {
 
     return '$khmerHourLabel $hour : $minute';
   }
+
+  static String formatTime(DateTime time) {
+    final hour = time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final hour12 = hour % 12 == 0 ? 12 : hour % 12;
+
+    final period = hour < 12 ? 'ព្រឹក' : 'ល្ងាច'; // Khmer for AM/PM
+
+    return '${hour12.toString().padLeft(2, '0')}:$minute $period';
+  }
 }
