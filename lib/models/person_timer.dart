@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:employee_work/core/enums/enum.dart';
+import 'package:employee_work/core/utils/util.dart';
 
 class PersonTimer {
   final String id;
@@ -14,10 +15,20 @@ class PersonTimer {
 
   final TimerStatus status;
 
-  // calculate total price based on time
   double get totalPrice {
     final totalSeconds = currentElapsedSeconds();
     return (totalSeconds / 3600) * hourlyRate;
+  }
+
+  String? get startTimeText {
+    if (startTime == null) return null;
+    return TimeUtil.formatTime(startTime!);
+  }
+
+  String? get endTimeText {
+    if (startTime == null) return null;
+    final endTime = startTime!.add(Duration(seconds: currentElapsedSeconds()));
+    return TimeUtil.formatTime(endTime);
   }
 
   PersonTimer({

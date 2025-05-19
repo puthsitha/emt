@@ -206,6 +206,38 @@ class PersonCard extends StatelessWidget {
               const SizedBox(width: Spacing.sm),
               Row(
                 children: [
+                  const Icon(
+                    Icons.start,
+                    size: 20,
+                    color: Colors.blueGrey,
+                  ),
+                  const SizedBox(width: Spacing.s),
+                  Text(
+                    timer.startTimeText?.toString() ?? 'N/A',
+                    style: context.textTheme.titleMedium!.copyWith(),
+                  ),
+                ],
+              ),
+              if (timer.status == TimerStatus.stopped) ...[
+                const SizedBox(width: Spacing.sm),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.stop_rounded,
+                      size: 20,
+                      color: Colors.deepOrangeAccent,
+                    ),
+                    const SizedBox(width: Spacing.s),
+                    Text(
+                      timer.endTimeText?.toString() ?? 'N/A',
+                      style: context.textTheme.titleMedium!.copyWith(),
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(width: Spacing.sm),
+              Row(
+                children: [
                   Icon(
                     Icons.hourglass_bottom_rounded,
                     size: 20,
