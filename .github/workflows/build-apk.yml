@@ -7,133 +7,159 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '17'
-        
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.24.5' # Use your Flutter version
-        channel: 'stable'
-        
-    - name: Install dependencies
-      run: flutter pub get
-      
-    # - name: Run tests
-    #   run: flutter test
-      
-    - name: Build APK
-      run: flutter build apk --release
-      
-    - name: Rename and get APK info
-      id: apk_info
-      run: |
-        # Find original APK
-        ORIGINAL_APK=$(find build/app/outputs/flutter-apk -name "*.apk" | head -1)
-        
-        # Create new filename with date and optional commit hash
-        DATE=$(date '+%Y-%m-%d')
-        COMMIT_SHORT=$(echo ${{ github.sha }} | cut -c1-7)
-        NEW_APK_NAME="EMTV1($DATE).apk"
-        # Alternative with commit: NEW_APK_NAME="EMTV1($DATE-$COMMIT_SHORT).apk"
-        NEW_APK_PATH="build/app/outputs/flutter-apk/$NEW_APK_NAME"
-        
-        # Rename the APK
-        mv "$ORIGINAL_APK" "$NEW_APK_PATH"
-        
-        # Get file info
-        APK_SIZE=$(du -h "$NEW_APK_PATH" | cut -f1)
-        
-        echo "apk_path=$NEW_APK_PATH" >> $GITHUB_OUTPUT
-        echo "apk_size=$APK_SIZE" >> $GITHUB_OUTPUT
-        echo "apk_name=$NEW_APK_NAME" >> $GITHUB_OUTPUT
-        
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-release-apk
-        path: ${{ steps.apk_info.outputs.apk_path }}
-        
-    - name: Check APK size and send to Telegram
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: |
-        APK_PATH="${{ steps.apk_info.outputs.apk_path }}"
-        APK_SIZE_BYTES=$(stat -c%s "$APK_PATH")
-        MAX_SIZE=$((50 * 1024 * 1024))  # 50MB in bytes
-        
-        # Send build info message
-        curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
-          -d chat_id="$TELEGRAM_CHAT_ID" \
-          -d parse_mode="Markdown" \
-          -d text="🚀 *Flutter Build Successful!*
-        
-        📱 *App:* ${{ github.repository }}
-        🔥 *Branch:* main
-        📝 *Commit:* [\`$(echo ${{ github.sha }} | cut -c1-7)\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-        👤 *Author:* ${{ github.actor }}
-        💬 *Message:* ${{ github.event.head_commit.message }}
-        📦 *APK Size:* ${{ steps.apk_info.outputs.apk_size }}
-        ⏰ *Build Time:* $(date '+%Y-%m-%d %H:%M:%S UTC')"
-        
-        # Check file size and handle accordingly
-        if [ $APK_SIZE_BYTES -le $MAX_SIZE ]; then
-          echo "APK size is under 50MB, sending directly to Telegram..."
-          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument" \
-            -F chat_id="$TELEGRAM_CHAT_ID" \
-            -F document=@"$APK_PATH" \
-            -F caption="📱 ${{ steps.apk_info.outputs.apk_name }}
-        
-        Ready to install! 🎉"
-        else
-          echo "APK size exceeds 50MB, uploading to GitHub Releases..."
-          
-          # Create GitHub Release
-          RELEASE_TAG="v$(date '+%Y.%m.%d.%H%M')"
-          RELEASE_NAME="Release $RELEASE_TAG"
-          
-          # Create release
-          RELEASE_RESPONSE=$(curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/releases" \
-            -d "{
-              \"tag_name\": \"$RELEASE_TAG\",
-              \"name\": \"$RELEASE_NAME\",
-              \"body\": \"🚀 Automated release from commit ${{ github.sha }}\n\n📱 APK Size: ${{ steps.apk_info.outputs.apk_size }}\n👤 Author: ${{ github.actor }}\",
-              \"draft\": false,
-              \"prerelease\": false
-            }")
-          
-          RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id": [0-9]*' | head -1 | cut -d' ' -f2)
-          
-          # Upload APK to release
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/vnd.android.package-archive" \
-            --data-binary @"$APK_PATH" \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets?name=${{ steps.apk_info.outputs.apk_name }}"
-          
-          # Send download link to Telegram
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG/${{ steps.apk_info.outputs.apk_name }}"
-          
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.5" # Use your Flutter version
+          channel: "stable"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # - name: Run tests
+      #   run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Rename and get APK info
+        id: apk_info
+        run: |
+          # Find original APK
+          ORIGINAL_APK=$(find build/app/outputs/flutter-apk -name "*.apk" | head -1)
+
+          # Create new filename with date and optional commit hash
+          DATE=$(date '+%Y-%m-%d')
+          COMMIT_SHORT=$(echo ${{ github.sha }} | cut -c1-7)
+          NEW_APK_NAME="emtv1($DATE).apk"
+          # Alternative with commit: NEW_APK_NAME="emtv1($DATE-$COMMIT_SHORT).apk"
+          NEW_APK_PATH="build/app/outputs/flutter-apk/$NEW_APK_NAME"
+
+          # Rename the APK
+          mv "$ORIGINAL_APK" "$NEW_APK_PATH"
+
+          # Get file info
+          APK_SIZE=$(du -h "$NEW_APK_PATH" | cut -f1)
+
+          echo "apk_path=$NEW_APK_PATH" >> $GITHUB_OUTPUT
+          echo "apk_size=$APK_SIZE" >> $GITHUB_OUTPUT
+          echo "apk_name=$NEW_APK_NAME" >> $GITHUB_OUTPUT
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: ${{ steps.apk_info.outputs.apk_path }}
+
+      - name: Check APK size and send to Telegram
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          APK_PATH="${{ steps.apk_info.outputs.apk_path }}"
+          APK_SIZE_BYTES=$(stat -c%s "$APK_PATH")
+          MAX_SIZE=$((50 * 1024 * 1024))
+
+          # Escape commit message for safe transmission
+          COMMIT_MSG=$(echo '${{ github.event.head_commit.message }}' | sed 's/"/\\"/g' | tr '\n' ' ')
+
+          # Send build info message
+          BUILD_MSG="🚀 *Flutter Build Successful!*
+
+          📱 *App:* ${{ github.repository }}
+          🔥 *Branch:* main  
+          📝 *Commit:* [\`$(echo ${{ github.sha }} | cut -c1-7)\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+          👤 *Author:* ${{ github.actor }}
+          💬 *Message:* ${COMMIT_MSG}
+          📦 *APK Size:* ${{ steps.apk_info.outputs.apk_size }}
+          ⏰ *Build Time:* $(date '+%Y-%m-%d %H:%M:%S UTC')"
+
           curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
             -d chat_id="$TELEGRAM_CHAT_ID" \
             -d parse_mode="Markdown" \
-            -d text="📱 *APK Too Large for Telegram!*
-        
-        🔗 *Download Link:* [Click here to download]($DOWNLOAD_URL)
-        📦 *File:* \`${{ steps.apk_info.outputs.apk_name }}\`
-        📏 *Size:* ${{ steps.apk_info.outputs.apk_size }}
-        
-        💡 *Note:* File was uploaded to GitHub Releases due to 50MB Telegram limit."
+            -d text="$BUILD_MSG"
+
+          # Check file size and handle accordingly
+          if [ $APK_SIZE_BYTES -le $MAX_SIZE ]; then
+            echo "APK size is under 50MB, sending directly to Telegram..."
+            
+            CAPTION="📱 ${{ steps.apk_info.outputs.apk_name }}
+
+          Ready to install! 🎉"
+            
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument" \
+              -F chat_id="$TELEGRAM_CHAT_ID" \
+              -F document=@"$APK_PATH" \
+              -F caption="$CAPTION"
+          else
+            echo "APK size exceeds 50MB, uploading to GitHub Releases..."
+            
+            # Create GitHub Release
+            RELEASE_TAG="v$(date '+%Y.%m.%d.%H%M')"
+            RELEASE_NAME="Release $RELEASE_TAG"
+            
+            # Create release JSON payload
+            RELEASE_BODY="🚀 Automated release from commit ${{ github.sha }}\\n\\n📱 APK Size: ${{ steps.apk_info.outputs.apk_size }}\\n👤 Author: ${{ github.actor }}"
+            
+            RELEASE_DATA=$(cat <<EOF
+          {
+            "tag_name": "$RELEASE_TAG",
+            "name": "$RELEASE_NAME", 
+            "body": "$RELEASE_BODY",
+            "draft": false,
+            "prerelease": false
+          }
+          EOF
+          )
+            
+            # Create release
+            RELEASE_RESPONSE=$(curl -s -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${{ github.repository }}/releases" \
+              -d "$RELEASE_DATA")
+            
+            RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id": [0-9]*' | head -1 | cut -d' ' -f2)
+            
+            if [ -n "$RELEASE_ID" ]; then
+              # Upload APK to release
+              curl -s -X POST \
+                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Content-Type: application/vnd.android.package-archive" \
+                --data-binary @"$APK_PATH" \
+                "https://uploads.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets?name=${{ steps.apk_info.outputs.apk_name }}"
+              
+              # Send download link to Telegram
+              DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG/${{ steps.apk_info.outputs.apk_name }}"
+              
+              LARGE_FILE_MSG="📱 *APK Too Large for Telegram!*
+
+          🔗 *Download Link:* [Click here to download]($DOWNLOAD_URL)
+          📦 *File:* \`${{ steps.apk_info.outputs.apk_name }}\`
+          📏 *Size:* ${{ steps.apk_info.outputs.apk_size }}
+
+          💡 *Note:* File was uploaded to GitHub Releases due to 50MB Telegram limit."
+              
+              curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+                -d chat_id="$TELEGRAM_CHAT_ID" \
+                -d parse_mode="Markdown" \
+                -d text="$LARGE_FILE_MSG"
+            else
+              echo "Failed to create GitHub release"
+              curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+                -d chat_id="$TELEGRAM_CHAT_ID" \
+                -d text="❌ Failed to upload large APK file. Please check GitHub Actions logs."
+            fi
+          fi
