@@ -52,8 +52,8 @@ class _EmptyDataState extends State<EmptyData> {
               onPressed: widget.onRetry,
               color: context.colors.redPrimary,
               borderRadius: BorderRadius.circular(100),
-              minSize: 0,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              minimumSize: const Size(0, 0),
               child: Text(
                 'Reload',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(

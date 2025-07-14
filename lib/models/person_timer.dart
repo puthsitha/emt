@@ -17,7 +17,14 @@ class PersonTimer {
 
   double get totalPrice {
     final totalSeconds = currentElapsedSeconds();
-    return (totalSeconds / 3600) * hourlyRate;
+    final raw = (totalSeconds / 3600) * hourlyRate;
+    final remainder = raw % 100;
+
+    if (remainder < 50) {
+      return raw - remainder;
+    } else {
+      return raw + (100 - remainder);
+    }
   }
 
   String? get startTimeText {

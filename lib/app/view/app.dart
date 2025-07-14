@@ -6,7 +6,7 @@ import 'package:employee_work/core/enums/enum.dart';
 import 'package:employee_work/core/routes/routes.dart';
 import 'package:employee_work/core/theme/src/dark_theme.dart';
 import 'package:employee_work/core/theme/theme.dart';
-import 'package:employee_work/l10n/l10n.dart';
+import 'package:employee_work/l10n/arb/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

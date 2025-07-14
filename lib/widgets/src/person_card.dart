@@ -212,10 +212,27 @@ class PersonCard extends StatelessWidget {
                     color: Colors.blueGrey,
                   ),
                   const SizedBox(width: Spacing.s),
-                  Text(
-                    timer.startTimeText?.toString() ?? 'N/A',
-                    style: context.textTheme.titleMedium!.copyWith(),
-                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: context.textTheme.titleMedium,
+                      children: [
+                        if (timer.startTimeText != null) ...[
+                          TextSpan(
+                            text: '${timer.startTimeText.toString()} ',
+                          ),
+                          TextSpan(
+                            text: '(${l10n.start_timer})',
+                            style: context.textTheme.titleMedium!.copyWith(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ] else
+                          const TextSpan(
+                            text: 'N/A',
+                          ),
+                      ],
+                    ),
+                  )
                 ],
               ),
               if (timer.status == TimerStatus.stopped) ...[
@@ -228,10 +245,26 @@ class PersonCard extends StatelessWidget {
                       color: Colors.deepOrangeAccent,
                     ),
                     const SizedBox(width: Spacing.s),
-                    Text(
-                      timer.endTimeText?.toString() ?? 'N/A',
-                      style: context.textTheme.titleMedium!.copyWith(),
-                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: context.textTheme.titleMedium, // base style
+                        children: [
+                          TextSpan(
+                            text: timer.endTimeText != null
+                                ? '${timer.endTimeText.toString()} '
+                                : 'N/A',
+                            style: context.textTheme.titleMedium,
+                          ),
+                          if (timer.endTimeText != null)
+                            TextSpan(
+                              text: '(${l10n.stop_timer})',
+                              style: context.textTheme.titleMedium!.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ],
@@ -245,7 +278,7 @@ class PersonCard extends StatelessWidget {
                   ),
                   const SizedBox(width: Spacing.s),
                   Text(
-                    '${timer.hourlyRate.toStringAsFixed(0)} ${l10n.riels_hour}',
+                    '${timer.hourlyRate.toStringAsFixed(0)} (${l10n.riels_hour})',
                     style: context.textTheme.titleMedium!.copyWith(),
                   ),
                 ],

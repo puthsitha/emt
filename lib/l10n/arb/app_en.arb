@@ -135,5 +135,9 @@
   "update_empolyee": "Update Employee",
   "@update_empolyee": {},
   "update": "Update",
-  "@update": {}
+  "@update": {},
+  "start_timer": "Time Start",
+  "@start_timer": {},
+  "stop_timer": "Time Stop",
+  "@stop_timer": {}
 }

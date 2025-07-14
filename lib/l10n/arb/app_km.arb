@@ -135,5 +135,9 @@
   "update_empolyee": "កែប្រែអ្នកធ្វើការ",
   "@update_empolyee": {},
   "update": "កែប្រែ",
-  "@update": {}
+  "@update": {},
+  "start_timer": "ម៉ោងចាប់ផ្តើម",
+  "@start_timer": {},
+  "stop_timer": "ម៉ោងបញ្ចប់",
+  "@stop_timer": {}
 }

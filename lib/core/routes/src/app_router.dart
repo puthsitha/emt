@@ -185,21 +185,21 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             size: 30,
             color: widget.child.currentIndex == 0
                 ? AppColors.white
-                : AppColors.white.withOpacity(0.5),
+                : AppColors.white.withValues(alpha: 0.5),
           ),
           Icon(
             Icons.auto_graph_outlined,
             size: 30,
             color: widget.child.currentIndex == 1
                 ? AppColors.white
-                : AppColors.white.withOpacity(0.5),
+                : AppColors.white.withValues(alpha: 0.5),
           ),
           Icon(
             Icons.settings,
             size: 30,
             color: widget.child.currentIndex == 2
                 ? AppColors.white
-                : AppColors.white.withOpacity(0.5),
+                : AppColors.white.withValues(alpha: 0.5),
           ),
         ],
         onTap: (index) {

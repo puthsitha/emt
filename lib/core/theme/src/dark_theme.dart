@@ -104,10 +104,10 @@ final darkTheme = ThemeData(
       fontSize: 12,
     ),
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     indicatorColor: colorSchemeDarkExt.neutral0,
     labelColor: colorSchemeDarkExt.neutral0,
-    unselectedLabelColor: colorSchemeDarkExt.neutral0.withOpacity(0.5),
+    unselectedLabelColor: colorSchemeDarkExt.neutral0.withValues(alpha: 0.5),
     labelPadding: EdgeInsets.zero,
     unselectedLabelStyle: const TextStyle(
       fontSize: 14,

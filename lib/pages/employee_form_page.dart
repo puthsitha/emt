@@ -236,7 +236,6 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                 height: 100,
                 width: 100,
                 child: CupertinoButton(
-                  minSize: 0,
                   pressedOpacity: 0.8,
                   padding: EdgeInsets.zero,
                   onPressed: () {
@@ -300,6 +299,7 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                       ),
                     );
                   },
+                  minimumSize: const Size(0, 0),
                   child: Stack(
                     clipBehavior: Clip.none,
                     fit: StackFit.expand,
@@ -325,7 +325,7 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                         child: CircleAvatar(
                           radius: 15,
                           backgroundColor:
-                              context.colors.neutral0.withOpacity(0.5),
+                              context.colors.neutral0.withValues(alpha: 0.5),
                           child: Icon(
                             Icons.edit,
                             color: context.colors.neutral100,
@@ -350,7 +350,8 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                     autofocus: true,
                     decoration: InputDecoration(
                       labelText: l10n.person_name,
-                      fillColor: context.colors.neutral50.withOpacity(0.2),
+                      fillColor:
+                          context.colors.neutral50.withValues(alpha: 0.2),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -369,7 +370,8 @@ class _EmployeeFormViewState extends State<EmployeeFormView> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       labelText: l10n.horuly_rate,
-                      fillColor: context.colors.neutral50.withOpacity(0.2),
+                      fillColor:
+                          context.colors.neutral50.withValues(alpha: 0.2),
                     ),
                     validator: (value) {
                       final text = value?.trim() ?? '';
