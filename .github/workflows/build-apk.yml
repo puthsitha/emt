@@ -57,7 +57,7 @@ jobs:
           echo "apk_name=$NEW_APK_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: app-release-apk
           path: ${{ steps.apk_info.outputs.apk_path }}
